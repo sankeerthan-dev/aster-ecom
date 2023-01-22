@@ -42,7 +42,8 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     fontSize: 12,
-    margin: 7
+    margin: 7,
+    alignItems: 'center'
   },
   categoryIcon: {
     alignItems: 'center',
