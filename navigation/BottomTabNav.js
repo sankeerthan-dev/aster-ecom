@@ -2,8 +2,6 @@ import { View, Text } from 'react-native'
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
-// import Login from '../pages/Login';
-// import Home from '../pages/Home';
 import StackHomeNav, { StackAccNav } from './StackNav';
 
 const BottomTab = createBottomTabNavigator()
