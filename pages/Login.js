@@ -1,15 +1,38 @@
-import React from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import { Text, View, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
+import { AuthContext } from '../context/AuthContext'
 import { StackAccNav } from '../navigation/StackNav'
 
 export default function Login({navigation}) {
+  const {loginUser}=useContext(AuthContext)
+  const {auth}=useContext(AuthContext)
+  const [mail,setMail]=useState('')
+  const [pwd, setPwd]=useState('')
+  const submitAction=()=>{
+    // POST request using fetch()
+    try{
+fetch("https://reqres.in/api/login", {
+  method: "POST",
+  body: JSON.stringify({
+    email:mail,password:pwd
+  }),
+  headers: {
+    "Content-type": "application/json; charset=UTF-8"
+  }
+})
+  .then((response) => response.json())
+  .then((json) => loginUser(json.token));
+
+  }catch(e){
+    console.log(e)
+  }}
   
   return (
     <View style={{ alignItems: 'center', backgroundColor: '#ffff', height: '100%' }}>
       <View style={styles.formContainer}>
-        <TextInput placeholder='Enter email ID' style={styles.inputDesign} />
-        <TextInput secureTextEntry={true} placeholder='Enter password' style={styles.inputDesign} />
-        <TouchableOpacity style={styles.loginButton}><Text style={{ color: '#ffff' }}>Login</Text></TouchableOpacity>
+        <TextInput placeholder='Enter email ID' style={styles.inputDesign} onChange={(e)=>{setMail(e.nativeEvent.text); console.log(mail)}} />
+        <TextInput placeholder='Enter password' style={styles.inputDesign} onChange={(e)=>{setPwd(e.nativeEvent.text); console.log(pwd)}} />
+        <TouchableOpacity style={styles.loginButton} onPress={submitAction} ><Text style={{ color: '#ffff' }}>Login</Text></TouchableOpacity>
         <TouchableOpacity><Text style={styles.signUpNav} onPress={()=>navigation.navigate('Signup') }>Sign up</Text></TouchableOpacity>
       </View>
     </View>
