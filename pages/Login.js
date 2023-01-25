@@ -2,14 +2,15 @@ import React from 'react'
 import { Text, View, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 import { StackAccNav } from '../navigation/StackNav'
 
-export default function Login({navigation:{navigate}}) {
+export default function Login({navigation}) {
+  
   return (
     <View style={{ alignItems: 'center', backgroundColor: '#ffff', height: '100%' }}>
       <View style={styles.formContainer}>
         <TextInput placeholder='Enter email ID' style={styles.inputDesign} />
         <TextInput secureTextEntry={true} placeholder='Enter password' style={styles.inputDesign} />
         <TouchableOpacity style={styles.loginButton}><Text style={{ color: '#ffff' }}>Login</Text></TouchableOpacity>
-        <TouchableOpacity><Text style={styles.signUpNav} onPress={()=>navigate('Signup')} >Sign up</Text></TouchableOpacity>
+        <TouchableOpacity><Text style={styles.signUpNav} onPress={()=>navigation.navigate('Signup') }>Sign up</Text></TouchableOpacity>
       </View>
     </View>
   )
