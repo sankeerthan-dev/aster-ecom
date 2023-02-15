@@ -1,24 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import {View, TouchableOpacity, StyleSheet, Image, FlatList, Text } from 'react-native'
-import { Ionicons, MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'
+import { View, TouchableOpacity, StyleSheet, Image, FlatList, Text, ScrollView } from 'react-native'
+// import { Ionicons, MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'
 import SearchBox from '../Components/SearchBox'
 import Images from '../images/Images'
-import {Card,Button} from 'react-native-paper'
-
-const dataSet=[
-  {
-    id:'1',title:'Mens Cotton Jacket',price:'	55.99',image:	'https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_.jpg',category:"men's clothing"
-  },
-   {
-    id:'2',title:'Solid Gold Petite Micropave ',price:'168',image:'https://fakestoreapi.com/img/61sbMiUnoGL._AC_UL640_QL65_ML3_.jpg',category:'jewelery'
-  },
-   {
-    id:'3',title:'SanDisk SSD PLUS 1TB Internal SSD',price:'109',image:'https://fakestoreapi.com/img/61U7T1koQqL._AC_SX679_.jpg',category:'electronics'
-  },
-   {
-    id:'4',title:"MBJ Women's Solid Short Sleeve Boat Neck V ",price:'9.85',image:	'https://fakestoreapi.com/img/71z3kpMAYsL._AC_UY879_.jpg',category:"women's clothing"
-  }
-]
+import { Card, Button } from 'react-native-paper'
+import { dataSet, categoryImages, images } from '../Data'
 
 export default function Home() {
   const [data, setData] = useState([])
@@ -27,39 +13,79 @@ export default function Home() {
       .then((res) => res.json())
       .then((json) => setData(json))
   }, [])
-  const renderItem =({ item })=>{
-    return(
-      <>
-      <Card style={{padding:10, marginTop:25,marginBottom:25,marginLeft:50,marginRight:50,borderRadius:10,borderColor:'white'}} >
-        <TouchableOpacity onPress={()=>console.log("pressed")}><Card.Title title={item.title} subtitle={item.category} />
-        </TouchableOpacity> 
-        <Card.Cover source={{ uri: item.image }} resizeMode="contain" style={{backgroundColor:'#fff',padding:10}} />
-      </Card>
-      </>
-    )
+  const [imgActive,setimgActive] = useState(0);
+ const onChange = (nativeEvent)=>{
+    if(nativeEvent){
+      const slide =Math.ceil(nativeEvent.contentOffset.x/nativeEvent.layoutMeasurement.width)
+      if(slide != imgActive){
+        setimgActive(slide);
+      }
+    }
   }
   return (
     <>
       <View>
         <SearchBox />
-        <View>
-          <Image source={Images.banner1} style={{ width: '100%', height: 120 }} />
-        </View>
+        <ScrollView style={{marginBottom: 80}}>
         <View style={styles.categoryContainer}>
-          <View style={styles.categoryIcon}>
-            <TouchableOpacity><Ionicons name='ios-shirt-sharp' size={32} style={{ marginTop: 3 }} /><Text>Clothing</Text></TouchableOpacity>
+        <FlatList 
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        data={categoryImages}
+        renderItem={({ item }) => (
+          <View style={styles.item}>
+          <Image style={{width:40,height:65,borderRadius:10}} source={{uri:item.image}} />
+          <Text>{item.title}</Text>
           </View>
-          <View style={styles.categoryIcon}>
-            <TouchableOpacity><MaterialCommunityIcons name='table-furniture' size={38} /><Text>Furniture</Text></TouchableOpacity>
-          </View>
-          <View style={styles.categoryIcon}>
-            <TouchableOpacity><MaterialCommunityIcons name='shoe-sneaker' size={38} /><Text>Shoes</Text></TouchableOpacity>
-          </View>
-          <View style={styles.categoryIcon}>
-            <TouchableOpacity><FontAwesome name='television' size={32} style={{ marginTop: 6 }} /><Text>Electronics</Text></TouchableOpacity>
-          </View>
+        )
+        }
+      />
         </View>
-        <FlatList data={dataSet} renderItem={renderItem} />
+        {/* start */}
+        <View style={styles.wrap}>
+    <ScrollView
+    onScroll={({nativeEvent})=> onChange(nativeEvent)}
+    showsHorizontalScrollIndicator ={false}
+    pagingEnabled
+    horizontal
+    style={styles.wrap}
+    >
+    {
+      images.map((e,index)=>
+      <Image 
+      key={e}
+      resizeMode='stretch'
+      style={styles.wrap}
+      source={{uri: e}}
+      />
+      )
+    }
+    </ScrollView>
+    <View style ={styles.wrapDot}>
+    {
+      images.map((e,index)=>
+      <Text
+      key={e}
+      style={imgActive == index ? styles.dotActive :styles.dot}
+      > ● </Text>
+      )
+    }
+    </View>
+    </View>
+    {/* end */}
+        <View>
+          <Text style={styles.SubHeaderStyle}>Top Deals</Text>
+        <View style={{ flexWrap: 'wrap', flexDirection: 'row', justifyContent: 'center' }}>
+          {dataSet.map((item) => (
+            <Card style={styles.cardDesign} >
+              <TouchableOpacity onPress={() => console.log("pressed")}><Card.Title title={item.title} subtitle={item.category} />
+              </TouchableOpacity>
+              <Card.Cover source={{ uri: item.image }} resizeMode="contain" style={{ backgroundColor: '#fff', padding: 10 }} />
+            </Card>
+          ))}
+        </View>
+        </View>
+        </ScrollView>
       </View>
     </>
   )
@@ -76,6 +102,22 @@ const styles = StyleSheet.create({
   },
   categoryIcon: {
     alignItems: 'center',
-    justifyContent: 'center'
-  }
+    justifyContent: 'center',
+  },
+  cardDesign: {
+    padding: 10,
+    backgroundColor: '#ffff',
+    borderColor: 'white',
+    width: 185,
+    margin: 7,
+  },
+  SubHeaderStyle:{
+    marginLeft: 20,
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  item:{
+    margin:7,
+    padding:7
+  },
 })
