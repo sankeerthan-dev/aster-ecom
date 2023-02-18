@@ -17,10 +17,6 @@ const PopularProducts =({cards})=>{
                 <Text style={{color:'green',fontSize:12,paddingTop:5}}>{item.popular}</Text>
               </Card.Content>
           </Card>
-          // <View style={{margin:20}}>
-          // <Image style={{width:100,height:100,borderRadius:10}} source={{uri:item.image}} />
-          // <Text>{item.title}</Text>
-          // </View>
         )
         }
       />

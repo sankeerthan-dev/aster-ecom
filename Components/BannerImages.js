@@ -60,7 +60,7 @@ const styles=StyleSheet.create({
     },
     wrap:{
       width:WIDTH,
-      height:HEIGHT *0.3
+      height:HEIGHT *0.2
     },
     wrapDot:{
       position:'absolute',
