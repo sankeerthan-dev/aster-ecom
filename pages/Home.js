@@ -4,7 +4,11 @@ import { View, TouchableOpacity, StyleSheet, Image, FlatList, Text, ScrollView }
 import SearchBox from '../Components/SearchBox'
 import Images from '../images/Images'
 import { Card, Button } from 'react-native-paper'
-import { dataSet, categoryImages, images } from '../Data'
+import { dataSet, categoryImages, images,advertise,mensClothing,womensClothing,popularProducts } from '../Data'
+import { BannerImages } from '../Components/BannerImages'
+import { Advertise } from '../Components/Advertise'
+import PopularProducts from '../Components/PopularProducts'
+import CustomCards from '../Components/CustomCards'
 
 export default function Home() {
   const [data, setData] = useState([])
@@ -35,44 +39,20 @@ export default function Home() {
         renderItem={({ item }) => (
           <View style={styles.item}>
           <Image style={{width:40,height:65,borderRadius:10}} source={{uri:item.image}} />
-          <Text>{item.title}</Text>
+          <Text style={{fontSize:10}}>{item.title}</Text>
           </View>
         )
         }
       />
         </View>
-        {/* start */}
-        <View style={styles.wrap}>
-    <ScrollView
-    onScroll={({nativeEvent})=> onChange(nativeEvent)}
-    showsHorizontalScrollIndicator ={false}
-    pagingEnabled
-    horizontal
-    style={styles.wrap}
-    >
-    {
-      images.map((e,index)=>
-      <Image 
-      key={e}
-      resizeMode='stretch'
-      style={styles.wrap}
-      source={{uri: e}}
-      />
-      )
-    }
-    </ScrollView>
-    <View style ={styles.wrapDot}>
-    {
-      images.map((e,index)=>
-      <Text
-      key={e}
-      style={imgActive == index ? styles.dotActive :styles.dot}
-      > ● </Text>
-      )
-    }
-    </View>
-    </View>
-    {/* end */}
+        <BannerImages images={images} />
+        <Advertise advertise={advertise} />
+        <Text style={styles.SubHeaderStyle}>Men's Clothing</Text>
+        <CustomCards cards={mensClothing} />
+        <Text style={styles.SubHeaderStyle}>Women's Clothing</Text> 
+        <CustomCards cards={womensClothing} />
+        <Text style={styles.SubHeaderStyle}>Popular Nearby</Text>
+      <PopularProducts cards={popularProducts} />
         <View>
           <Text style={styles.SubHeaderStyle}>Top Deals</Text>
         <View style={{ flexWrap: 'wrap', flexDirection: 'row', justifyContent: 'center' }}>
@@ -113,6 +93,7 @@ const styles = StyleSheet.create({
   },
   SubHeaderStyle:{
     marginLeft: 20,
+    marginTop:5,
     fontSize: 20,
     fontWeight: 'bold',
   },
